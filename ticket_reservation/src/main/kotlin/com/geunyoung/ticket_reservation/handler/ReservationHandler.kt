@@ -17,7 +17,8 @@ class ReservationHandler(
     fun reserve(serverRequest: ServerRequest): Mono<ServerResponse> {
         val userId = serverRequest.headers().firstHeader("userId") ?: return status(HttpStatus.UNAUTHORIZED).build()
         return reservationService.reserve(serverRequest.bodyToMono(), Mono.just(userId.toLong())).flatMap {
-            status(HttpStatus.NO_CONTENT).build()
+            if (it) status(HttpStatus.NO_CONTENT).build()
+            else status(HttpStatus.FORBIDDEN).build()
         }
     }
 }
