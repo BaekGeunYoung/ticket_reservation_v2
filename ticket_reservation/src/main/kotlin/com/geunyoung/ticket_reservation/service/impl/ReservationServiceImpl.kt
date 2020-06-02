@@ -17,26 +17,39 @@ class ReservationServiceImpl(
         @Autowired private val redissonService: RedissonService
 ): ReservationService {
     override fun reserve(reserveDtoMono: Mono<ReserveDto>, userIdMono: Mono<Long>): Mono<Boolean> {
-        val lock = redissonService.getLock(Constants.RESERVATION_LOCK_NAME)
-        return lock.tryLock(10000, 5000, TimeUnit.MILLISECONDS).flatMap {
-            if (it) {
-                try {
-                    val countMono = redissonService.getAtomicLong("count")
-                    return@flatMap countMono.get().flatMap {count ->
-                        if (count >= Constants.MAX_RESERVATION_COUNT) Mono.just(false)
-                        else countMono.incrementAndGet().flatMap {
-                            reserveDtoMono.flatMap { reserveDto ->
-                                userIdMono.flatMap { userId ->
-                                    reservationRepository.save(Reservation(userId = userId, number = reserveDto.number))
-                                }
-                            }.map { true }
+//        val lock = redissonService.getLock(Constants.RESERVATION_LOCK_NAME)
+
+        val countMono = redissonService.getAtomicLong("count")
+        return countMono.get().flatMap {count ->
+            reserveDtoMono.flatMap { reserveDto ->
+                userIdMono.flatMap { userId ->
+                    reservationRepository.save(Reservation(userId = userId, number = reserveDto.number)).flatMap {
+                        countMono.getAndSet(count + reserveDto.number).flatMap {
+                            Mono.just(true)
                         }
                     }
-                } finally {
-                    lock.unlock()
                 }
             }
-            else Mono.just(false)
         }
+
+//        return lock.tryLock(10000, 5000, TimeUnit.MILLISECONDS).flatMap {
+//            if (it) {
+//                val countMono = redissonService.getAtomicLong("count")
+//
+//                return@flatMap countMono.get().flatMap { count ->
+//                    if (count >= Constants.MAX_RESERVATION_COUNT) Mono.just(false)
+//                    else reserveDtoMono.flatMap { reserveDto ->
+//                            userIdMono.flatMap { userId ->
+//                                reservationRepository.save(Reservation(userId = userId, number = reserveDto.number)).flatMap {
+//                                    countMono.getAndSet(count + reserveDto.number).flatMap {
+//                                        Mono.just(true)
+//                                    }
+//                                }
+//                            }
+//                        }
+//                }
+//            }
+//            else Mono.just(false)
+//        }
     }
 }

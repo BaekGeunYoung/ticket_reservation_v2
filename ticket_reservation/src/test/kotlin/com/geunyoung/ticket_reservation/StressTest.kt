@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.StopWatch
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.exchange
 
 class StressTest {
     @Test
@@ -22,7 +23,7 @@ class StressTest {
         stopWatch.start()
 
         runBlocking {
-            repeat(1000) {
+            repeat(10000) {
                 launch {
                     val response = restTemplate.exchange<String>(
                         "http://localhost:8080/reservation/",
