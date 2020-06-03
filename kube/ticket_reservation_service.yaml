@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticket_reservation_api
+  labels:
+    app: ticket_reservation_api
+spec:
+  type: NodePort
+  selector:
+    app: ticket_reservation_api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket_reservation_api
+  labels:
+    name: ticket_reservation_api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ticket_reservation_api
+  template:
+    metadata:
+      labels:
+        app: ticket_reservation_api
+    spec:
+      containers:
+        - name: api
+          image: dvmflstm/ticket_reservation_api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: R2DBC_LOGGING_LEVEL
+              value: "DEBUG"
+            - name: SPRING_R2DBC_URL
+              value: "r2dbc:mysql://mysql:3306/ticket_reservation?useUnicode=true&characterEncoding=utf8"
+            - name: SPRING_R2DBC_USERNAME
+              value: "root"
+            - name: SPRING_R2DBC_PASSWORD
+              value: "dkdltm123"

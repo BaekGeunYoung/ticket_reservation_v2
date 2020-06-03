@@ -1,0 +1,12 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/*
+            backend:
+              serviceName: ticket_reservation_api
+              servicePort: 80
