@@ -5,5 +5,6 @@ import org.redisson.api.RLockReactive
 
 interface RedissonService {
     fun getLock(lockName: String): RLockReactive
+
     fun getAtomicLong(key: String): RAtomicLongReactive
 }
