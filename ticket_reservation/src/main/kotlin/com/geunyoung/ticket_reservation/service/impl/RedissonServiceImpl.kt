@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class RedissonServiceImpl : RedissonService {
-//    @Value("\${redis.uri:redis://localhost:6379}")
-    private val redisUri: String = "redis://localhost:6379"
+    @Value("\${REDIS_HOST:localhost}")
+    private var redisHost: String = ""
     private val config = Config()
     private lateinit var redissonClient: RedissonReactiveClient
+    private lateinit var redisUri: String
 
     init {
+        redisUri = "redis://$redisHost:6379"
         config.useSingleServer().address = redisUri
         redissonClient = Redisson.createReactive(config)
     }
