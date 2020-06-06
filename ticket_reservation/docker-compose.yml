@@ -1,0 +1,13 @@
+version: "3"
+services:
+  ticket_reservation_api:
+    image: dvmflstm/ticket_reservation_api
+    container_name: ticket_reservation_api
+    environment:
+      R2DBC_LOGGING_LEVEL: "DEBUG"
+      SPRING_R2DBC_URL: "r2dbc:mysql://localhost:3306/ticket_reservation?useUnicode=true&characterEncoding=utf8"
+      SPRING_R2DBC_USERNAME: "root"
+      SPRING_R2DBC_PASSWORD: "dkdltm123"
+      REDIS_HOST: "localhost"
+    ports:
+    - 8080:8080
