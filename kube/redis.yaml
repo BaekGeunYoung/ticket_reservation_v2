@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ticket-reservation-redis
+  labels:
+    app: ticket-reservation-redis
+spec:
+  ports:
+    - port: 3306
+      name: ticket-reservation-redis
+  clusterIP: None
+  selector:
+    app: ticket-reservation-reids
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-reservation-redis
+  labels:
+    name: ticket-reservation-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticket-reservation-redis
+  template:
+    metadata:
+      labels:
+        app: ticket-reservation-redis
+    spec:
+      containers:
+        - name: api
+          image: redis:alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6379

@@ -8,5 +8,5 @@ spec:
         paths:
           - path: /api/*
             backend:
-              serviceName: ticket_reservation_api
+              serviceName: ticket-reservation-api
               servicePort: 80
