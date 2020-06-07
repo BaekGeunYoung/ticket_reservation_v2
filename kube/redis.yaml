@@ -6,11 +6,11 @@ metadata:
     app: ticket-reservation-redis
 spec:
   ports:
-    - port: 3306
+    - port: 6379
       name: ticket-reservation-redis
   clusterIP: None
   selector:
-    app: ticket-reservation-reids
+    app: ticket-reservation-redis
 
 ---
 apiVersion: apps/v1

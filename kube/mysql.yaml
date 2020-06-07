@@ -24,7 +24,7 @@ spec:
   selector:
     matchLabels:
       app: mysql
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -49,6 +49,12 @@ spec:
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config
   volumeClaimTemplates:
     - metadata:
         name: mysql-data
@@ -70,3 +76,12 @@ metadata:
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mysql-initdb-config
+data:
+  initdb.sql: |
+    drop table if exists reservation;
+    create table reservation (id bigint primary key auto_increment, user_id bigint, number int);

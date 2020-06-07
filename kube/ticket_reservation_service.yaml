@@ -40,10 +40,10 @@ spec:
             - name: R2DBC_LOGGING_LEVEL
               value: "DEBUG"
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:mysql://mysql:3306/ticket_reservation?useUnicode=true&characterEncoding=utf8"
+              value: "r2dbc:mysql://mysql/ticket_reservation?useUnicode=true&characterEncoding=utf8"
             - name: SPRING_R2DBC_USERNAME
               value: "root"
             - name: SPRING_R2DBC_PASSWORD
               value: "dkdltm123"
-            - name: REDIS_URI
-              value: "redis://ticket-reservation-redis:6379"
+            - name: REDIS_HOST
+              value: "ticket-reservation-redis"
