@@ -6,7 +6,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /api/*
+          - path: /*
             backend:
               serviceName: ticket-reservation-api
               servicePort: 80
