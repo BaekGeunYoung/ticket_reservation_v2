@@ -6,7 +6,7 @@ services:
     restart: on-failure
     environment:
       R2DBC_LOGGING_LEVEL: "DEBUG"
-      SPRING_R2DBC_URL: "r2dbc:mysql://ticket_reservation_mysql:3306/ticket_reservation?useUnicode=true&characterEncoding=utf8"
+      SPRING_R2DBC_URL: "r2dbc:mysql://ticket_reservation_mysql/ticket_reservation?useUnicode=true&characterEncoding=utf8"
       SPRING_R2DBC_USERNAME: "root"
       SPRING_R2DBC_PASSWORD: "dkdltm123"
       REDIS_HOST: "ticket_reservation_redis"
