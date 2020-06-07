@@ -3,11 +3,28 @@ services:
   ticket_reservation_api:
     image: dvmflstm/ticket_reservation_api
     container_name: ticket_reservation_api
+    restart: on-failure
     environment:
       R2DBC_LOGGING_LEVEL: "DEBUG"
-      SPRING_R2DBC_URL: "r2dbc:mysql://localhost:3306/ticket_reservation?useUnicode=true&characterEncoding=utf8"
+      SPRING_R2DBC_URL: "r2dbc:mysql://ticket_reservation_mysql:3306/ticket_reservation?useUnicode=true&characterEncoding=utf8"
       SPRING_R2DBC_USERNAME: "root"
       SPRING_R2DBC_PASSWORD: "dkdltm123"
-      REDIS_HOST: "localhost"
+      REDIS_HOST: "ticket_reservation_redis"
     ports:
     - 8080:8080
+  ticket_reservation_redis:
+    image: redis:alpine
+    container_name: ticket_reservation_redis
+    restart: on-failure
+    ports:
+    - 6379:6379
+  ticket_reservation_mysql:
+    image: mysql:5.7
+    container_name: ticket_reservation_mysql
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: "dkdltm123"
+    ports:
+    - 3306:3306
+    volumes:
+    - /Users/geunyoung/mysql_db:/var/lib/mysql
