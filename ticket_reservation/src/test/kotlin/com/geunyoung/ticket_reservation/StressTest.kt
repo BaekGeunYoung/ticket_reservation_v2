@@ -9,11 +9,10 @@ import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.StopWatch
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.exchange
 
 class StressTest {
     @Test
-    fun blocking(): Unit {
+    fun stress_test() {
         val restTemplate = RestTemplate()
         val stopWatch = StopWatch()
         val requestBody = ReserveDto(3)
@@ -23,10 +22,10 @@ class StressTest {
         stopWatch.start()
 
         runBlocking {
-            repeat(10000) {
+            repeat(1000) {
                 launch {
                     val response = restTemplate.exchange<String>(
-                        "http://localhost:8080/reservation/",
+                        "http://34.120.87.126/reservation",
                         HttpMethod.POST,
                         HttpEntity(requestBody, headers),
                         String::class.java
