@@ -208,3 +208,7 @@ replica 갯수를 늘림에 따라 max latency 값이 현저하게 줄어든 것
 ## 결론
 
 spring webflux를 이용해 높은 동시성을 갖춘 서버를 구축할 수 있었고, latency를 낮추기 위해 다수의 프로세스를 작동시키는 환경에서 redis를 이용해 공유 자원을 효과적으로 관리하는 방법을 학습해보았다. spring webflux가 spring MVC에 비해서 가지는 장점을 체감해볼 수 있었고, redisson이 제공하는 atomic한 연산들의 도움을 받아 손쉽게 코드를 작성할 수 있었다. 전체적으로 서버의 latency를 낮추기 위해서는 어느 부분에 신경을 써야하는 지에 대해 많은 고민을 해볼 수 있는 실습이었다고 생각한다.
+
+## 추가로 개선할 점
+
+persistent layer는 언제나 커다란 병목 지점으로 남아있는데, disk I/O로 인한 성능 저하를 획기적으로 개선할 수 있는 방법으로 IMDG (in-memory data grid) 를 고려할 수 있다. IMDG는 인메모리 db를 어플리케이션의 메인 데이터베이스로 하고, 분산 시스템을 기반으로 하여 데이터의 신뢰성과 메모리 크기의 한계를 보완한 기술이다. 이를 활용하면 전체적인 latency가 확실히 줄어들 것이라고 예상할 수 있지만, hazelcast 등 현재 나와 있는 IMDG 솔루션들은 reactive programming 방식에 대한 integration이 아직 마련되어 있지 않은 것 같다. hazelcast에서 reactor framework와의 integration을 지원하게 되면 그때 다시 적용을 검토해봐야겠다.
